@@ -1,7 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "FGHearingSensingComponent.h"
+#include "EngineUtils.h"
+#include "FGAI/FGCharacter.h"
 #include "FGAI/Components/NoiseComponent.h"
 
 UFGHearingSensingComponent::UFGHearingSensingComponent()
@@ -10,9 +10,16 @@ UFGHearingSensingComponent::UFGHearingSensingComponent()
 
 }
 
-void UFGHearingSensingComponent::OnHear(FVector Location)
+void UFGHearingSensingComponent::OnHear(FVector Location, float NoiseMagnitude)
 {
-	UE_LOG(LogTemp, Warning, TEXT("dsadsa"));
+	float DistanceSqr = FVector::DistSquared(GetOwner()->GetActorLocation(), Location);
+
+	UE_LOG(LogTemp, Warning, TEXT("DS: %f, NM: %f"), DistanceSqr, NoiseMagnitude);
+	NoiseMagnitude *= NoiseMagnitude;
+	if(DistanceSqr < NoiseMagnitude )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, TEXT("SOMEONE HEARD YOU"));
+	}
 	
 }
 
@@ -23,12 +30,19 @@ void UFGHearingSensingComponent::BeginPlay()
 	Super::BeginPlay();
 
 	AActor* Owner = GetOwner();
-	UNoiseComponent* NoiseComponent = Owner->FindComponentByClass<UNoiseComponent>();
 
-	if(NoiseComponent != NULL)
+	for(TActorIterator<AFGCharacter> NoiseItr(GetWorld()); NoiseItr; ++NoiseItr)
 	{
-		NoiseComponent->NoiseEvent.AddDynamic(this, &UFGHearingSensingComponent::OnHear);
+		AFGCharacter* Char = *NoiseItr;
 
+		UActorComponent* Act = (Char->FindComponentByClass<UNoiseComponent>());
+		
+		if(Act!=nullptr)
+		{
+			UNoiseComponent* NoiseComponent = Cast<UNoiseComponent>(Act);
+			NoiseComponent->NoiseEvent.AddDynamic(this, &UFGHearingSensingComponent::OnHear);
+
+		}
 	}
 }
 

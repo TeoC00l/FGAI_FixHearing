@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AI/Sensing/FGVisionSensingComponent.h"
 #include "Components/NoiseComponent.h"
 #include "GameFramework/Pawn.h"
 #include "FGCharacter.generated.h"

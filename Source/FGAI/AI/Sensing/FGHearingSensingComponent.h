@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "FGAI/Components/NoiseComponent.h"
 #include "FGHearingSensingComponent.generated.h"
 
 
@@ -17,10 +16,9 @@ public:
 
 
 public:	
-	// Sets default values for this component's properties
 	UFGHearingSensingComponent();
 	UFUNCTION()
-	void OnHear(FVector Location);
+	void OnHear(FVector Location, float NoiseMagnitude);
 
 protected:
 	// Called when the game starts

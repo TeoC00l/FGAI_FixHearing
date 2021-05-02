@@ -15,12 +15,9 @@ UNoiseComponent::UNoiseComponent()
 }
 
 
-void UNoiseComponent::SpawnNoise(FVector Location)
+void UNoiseComponent::SpawnNoise(FVector Location, float NoiseMagnitude)
 {
-	FRotator Rot;
-	GetWorld()->SpawnActor<AFGNoiseActor>(Location, Rot);
-	
-	NoiseEvent.Broadcast(Location);
+	NoiseEvent.Broadcast(Location, NoiseMagnitude);
 }
 
 
