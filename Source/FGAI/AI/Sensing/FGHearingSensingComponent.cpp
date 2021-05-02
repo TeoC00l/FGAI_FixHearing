@@ -14,7 +14,6 @@ void UFGHearingSensingComponent::OnHear(FVector Location, float NoiseMagnitude)
 {
 	float DistanceSqr = FVector::DistSquared(GetOwner()->GetActorLocation(), Location);
 
-	UE_LOG(LogTemp, Warning, TEXT("DS: %f, NM: %f"), DistanceSqr, NoiseMagnitude);
 	NoiseMagnitude *= NoiseMagnitude;
 	if(DistanceSqr < NoiseMagnitude )
 	{
